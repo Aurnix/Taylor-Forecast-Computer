@@ -28,13 +28,15 @@ SOFTWARE. */
 // "Wind" is the Cardnal Wind Direction - N,NE,E, etc.
 // "Pressure" corresponds to the Falling/Rising Barometer Case Assignments
 // "Trend" selects the "rising or steady" and "falling slowly/rapidly". The original slide rule has two sides, and this selects the appropriate forecast set
-// Trend = 0 for falling
-// Trend = 1 for rising
+// For any 12 hour period:
+// >= 0.2 InHG - Rapididly changing
+// 0.05-2 inHg - Slowly changing
+//  <0.05 inHg - Steady
 
 function taylorCaster (wind, pressure, trend){
     var text; // <-- Returned variable
 	
-// Falling Barometer Case Assignments
+// Falling Barometer Case Line Assignments
 // Above 30.2 InHG
 // 	Falling Rapidly - 1
 // 	Falling Slowly - 4
@@ -44,7 +46,8 @@ function taylorCaster (wind, pressure, trend){
 // Below 30 InHG
 // 	Falling Rapidly - 3
 // 	Falling Slowly - 6
-	if (trend = 0){	
+	
+	if (trend = 0){	//Falling Barometer
 case "N":{
 	switch(pressure){
 
@@ -121,7 +124,7 @@ case 6:text = "Unsettled";break;
  
  }
  
-////// Rising and/or Steady barometer case assignments
+////// Rising and/or Steady barometer case line assignments
 // Above 30.2
 // 	Rising Rapidly or Slowly - 1
 // 	Steady - 4
@@ -132,7 +135,7 @@ case 6:text = "Unsettled";break;
 // 	Rising Rapidly or Slowly - 3
 // 	Steady - 6
 
-else if ( trend = 1){
+else if ( trend = 1){ // Rising Barometer
 case "N":{
 	switch(pressure){
 case 1:text = "Fair and Cooler";break;
