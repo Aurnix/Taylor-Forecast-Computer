@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Taylor Forecast Computer</title>
+    <script src="taylorcastv2.js"></script>
+</head>
+<body>
+    <h1>Taylor Forecast Computer</h1>
+    <form id="forecastForm">
+        <label for="wind">Wind Direction:</label><br>
+        <select id="wind" name="wind">
+            <option value="N">N</option>
+            <option value="NE">NE</option>
+            <option value="E">E</option>
+            <option value="SE">SE</option>
+            <option value="S">S</option>
+            <option value="SW">SW</option>
+            <option value="W">W</option>
+            <option value="NW">NW</option>
+        </select><br>
+        <label for="pressureTrend">Pressure Trend:</label><br>
+        <select id="pressureTrend" name="pressureTrend">
+            <option value="0">Falling Slowly</option>
+            <option value="1">Falling Rapidly</option>
+            <option value="2">Steady</option>
+            <option value="3">Rising</option>
+        </select><br>
+        <label for="pressureRange">Pressure Range:</label><br>
+        <select id="pressureRange" name="pressureRange">
+            <option value="0">>30.2 inHg</option>
+            <option value="1">30.0-30.2 inHg</option>
+            <option value="2"><30 inHg</option>
+        </select><br>
+        <input type="submit" value="Get Forecast">
+        <textarea id="forecastResult" rows="1" readonly></textarea>
+    </form>
+
+    <script>
+        document.getElementById('forecastForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // prevent form from submitting and refreshing the page
+
+            var wind = document.getElementById('wind').value;
+            var pressureTrend = document.getElementById('pressureTrend').value;
+            var pressureRange = document.getElementById('pressureRange').value;
+
+var pressureMap = {
+    // Falling Barometer Case Line Assignments
+    '0': [3, 4, 5], // Falling Slowly: Above 30.2 InHg -> 3, 30-30.2 InHg -> 4, Below 30 InHg -> 5
+    '1': [0, 1, 2], // Falling Rapidly: Above 30.2 InHg -> 0, 30-30.2 InHg -> 1, Below 30 InHg -> 2
+    
+    // Rising and/or Steady barometer case line assignments
+    '2': [3, 4, 5], // Steady: Above 30.2 InHg -> 3, 30-30.2 InHg -> 4, Below 30 InHg -> 5
+    '3': [0, 1, 2]  // Rising: Above 30.2 InHg -> 0, 30-30.2 InHg -> 1, Below 30 InHg -> 2
+};
+
+
+            var pressure = pressureMap[pressureTrend][pressureRange];
+            var trend = (pressureTrend < 2) ? '0' : '1'; // '0' for Falling, '1' for Rising or Steady
+
+            var forecast = taylorCaster(wind, pressure, trend);
+            document.getElementById('forecastResult').value = 'Forecast: ' + forecast;
+        });
+    </script>
+</body>
+</html>
